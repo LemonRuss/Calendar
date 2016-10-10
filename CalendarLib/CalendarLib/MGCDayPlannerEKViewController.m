@@ -109,9 +109,9 @@ static NSString* const EventCellReuseIdentifier = @"EventCellReuseIdentifier";
         nc = [[UINavigationController alloc]initWithRootViewController:eventController];
         nc.modalPresentationStyle = UIModalPresentationPopover;
         eventController.presentationController.delegate = self;
-        
-        [self showDetailViewController:nc sender:self];
-        
+      
+        [self presentViewController:nc animated:NO completion:nil];
+      
         CGRect visibleRect = CGRectIntersection(self.dayPlannerView.bounds, [self.dayPlannerView convertRect:view.bounds fromView:view]);
         UIPopoverPresentationController *popController = nc.popoverPresentationController;
         popController.permittedArrowDirections = UIPopoverArrowDirectionLeft|UIPopoverArrowDirectionRight;
@@ -131,7 +131,7 @@ static NSString* const EventCellReuseIdentifier = @"EventCellReuseIdentifier";
     eventController.modalPresentationStyle = UIModalPresentationPopover;
     eventController.presentationController.delegate = self;
     
-    [self showDetailViewController:eventController sender:self];
+    [self presentViewController:eventController animated:NO completion:nil];
     
     CGRect cellRect = [self.dayPlannerView rectForNewEventOfType:self.createdEventType atDate:self.createdEventDate];
     CGRect visibleRect = CGRectIntersection(self.dayPlannerView.bounds, cellRect);
@@ -488,17 +488,17 @@ static NSString* const EventCellReuseIdentifier = @"EventCellReuseIdentifier";
 
 #pragma mark - UIPopoverPresentationControllerDelegate
 
-//- (UIViewController*)presentationController:(UIPresentationController *)controller viewControllerForAdaptivePresentationStyle:(UIModalPresentationStyle)style
-//{
-//    if ([controller.presentedViewController isKindOfClass:EKEventEditViewController.class]) {
-//        return controller.presentedViewController;
-//    }
-//    else {
-//        UINavigationController *nc = [[UINavigationController alloc]initWithRootViewController:controller.presentedViewController];
-//        nc.delegate = self;
-//        return nc;
-//    }
-//}
+- (UIViewController*)presentationController:(UIPresentationController *)controller viewControllerForAdaptivePresentationStyle:(UIModalPresentationStyle)style
+{
+    if ([controller.presentedViewController isKindOfClass:EKEventEditViewController.class]) {
+        return controller.presentedViewController;
+    }
+    else {
+        UINavigationController *nc = [[UINavigationController alloc]initWithRootViewController:controller.presentedViewController];
+        nc.delegate = self;
+        return nc;
+    }
+}
 
 
 - (void)popoverPresentationController:(UIPopoverPresentationController *)popoverPresentationController willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView *__autoreleasing  _Nonnull *)view

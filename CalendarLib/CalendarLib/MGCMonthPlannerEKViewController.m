@@ -95,7 +95,7 @@ static NSString* const EventCellReuseIdentifier = @"EventCellReuseIdentifier";
         nc.modalPresentationStyle = UIModalPresentationPopover;
         eventController.presentationController.delegate = self;
         
-        [self showDetailViewController:nc sender:self];
+        [self presentViewController:nc animated:NO completion:nil];
         
         //CGRect visibleRect = CGRectIntersection(self.monthPlannerView.bounds, [self.monthPlannerView convertRect:view.bounds fromView:view]);
         UIPopoverPresentationController *popController = nc.popoverPresentationController;
@@ -115,8 +115,8 @@ static NSString* const EventCellReuseIdentifier = @"EventCellReuseIdentifier";
     eventController.modalInPopover = YES;
     eventController.modalPresentationStyle = UIModalPresentationPopover;
     eventController.presentationController.delegate = self;
-    
-    [self showDetailViewController:eventController sender:self];
+  
+  [self presentViewController:eventController animated:NO completion:nil];
     
     UIPopoverPresentationController *popController = eventController.popoverPresentationController;
     popController.permittedArrowDirections = UIPopoverArrowDirectionLeft|UIPopoverArrowDirectionRight;
