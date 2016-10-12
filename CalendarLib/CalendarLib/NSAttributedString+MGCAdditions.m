@@ -81,20 +81,21 @@ NSString * const MGCCircleMarkAttributeName = @"MGCCircleMarkAttributeName";
     CGSize maxSize = CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX);
     CGRect strRect = [self boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin context:nil];
     CGFloat markWidth = fmaxf(strRect.size.width, strRect.size.height) + 2. * mark.margin;
-    CGRect markRect = CGRectMake(0, 5, markWidth, strRect.size.height + mark.margin);
+    CGRect markRect = CGRectMake(0, 0, markWidth, markWidth);
     
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(markRect.size.width, markRect.size.height + 5), NO, 0.0f);
+    UIGraphicsBeginImageContextWithOptions(markRect.size, NO, 0.0f);
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSaveGState(ctx);
-
-  
-    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:markRect cornerRadius: 10];
-    [mark.color setFill];
-    [path fill];
-  
-    strRect.origin = CGPointMake(markWidth/2. - strRect.size.width/2., markWidth/2. - strRect.size.height/2. - 6);
+    
+    CGContextSetStrokeColorWithColor(ctx, mark.borderColor.CGColor);
+    CGContextSetFillColorWithColor(ctx, mark.color.CGColor);
+    
+    CGContextAddEllipseInRect(ctx, CGRectInset(markRect, 1, 1));
+    CGContextDrawPath(ctx, kCGPathFillStroke);
+    
+    strRect.origin = CGPointMake(markWidth/2. - strRect.size.width/2., markWidth/2. - strRect.size.height/2.);
     [self drawWithRect:strRect options:NSStringDrawingUsesLineFragmentOrigin context:nil];
-  
+    
     CGContextRestoreGState(ctx);
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
