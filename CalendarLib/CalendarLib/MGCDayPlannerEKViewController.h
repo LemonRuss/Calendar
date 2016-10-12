@@ -47,6 +47,9 @@
 - (instancetype)initWithEventStore:(EKEventStore*)eventStore;
 - (void)reloadEvents;
 
+- (EKEvent*)eventOfType:(MGCEventType)type atIndex:(NSUInteger)index date:(NSDate*)date;
+- (void)fetchEventsInDateRange:(MGCDateRange*)range;
+
 @end
 
 
