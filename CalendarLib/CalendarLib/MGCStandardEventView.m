@@ -75,17 +75,26 @@ static CGFloat kSpace = 2;
 	NSMutableAttributedString *as = [[NSMutableAttributedString alloc]initWithString:s attributes:@{NSFontAttributeName: boldFont ?: self.font }];
 	
 	if (self.subtitle && self.subtitle.length > 0 && self.style & MGCStandardEventViewStyleSubtitle) {
-		NSMutableString *s  = [NSMutableString stringWithFormat:@"\n%@", self.subtitle];
+		NSMutableString *s  = [NSMutableString stringWithFormat:@"\n\r%@", self.subtitle];
 		NSMutableAttributedString *subtitle = [[NSMutableAttributedString alloc]initWithString:s attributes:@{NSFontAttributeName:self.font}];
 		[as appendAttributedString:subtitle];
 	}
 	
-	if (self.detail && self.detail.length > 0 && self.style & MGCStandardEventViewStyleDetail) {
-		UIFont *smallFont = [UIFont fontWithDescriptor:[self.font fontDescriptor] size:self.font.pointSize - 2];
-		NSMutableString *s = [NSMutableString stringWithFormat:@"\t%@", self.detail];
-		NSMutableAttributedString *detail = [[NSMutableAttributedString alloc]initWithString:s attributes:@{NSFontAttributeName:smallFont}];
-		[as appendAttributedString:detail];
-	}
+//	if (self.detail && self.detail.length > 0 && self.style & MGCStandardEventViewStyleDetail) {
+//		UIFont *smallFont = [UIFont fontWithDescriptor:[self.font fontDescriptor] size:self.font.pointSize - 2];
+//		NSMutableString *s = [NSMutableString stringWithFormat:@"\t%@", self.detail];
+//		NSMutableAttributedString *detail = [[NSMutableAttributedString alloc]initWithString:s attributes:@{NSFontAttributeName:smallFont}];
+//		[as appendAttributedString:detail];
+//	}
+  
+  if (([_subtitle rangeOfString: @"ТКС"].location != NSNotFound) || ([_subtitle rangeOfString: @"ВКС"].location != NSNotFound)) {
+    NSTextAttachment *attachment = [[NSTextAttachment alloc] initWithData:nil ofType:nil];
+    attachment.image = [UIImage imageNamed:@"cam"];
+    NSAttributedString *image = [NSAttributedString attributedStringWithAttachment:attachment];
+    NSMutableAttributedString *imageString = [[NSMutableAttributedString alloc] initWithString:@"\n\r"];
+    [imageString appendAttributedString:image];
+    [as appendAttributedString:imageString];
+  }
 	
 	NSTextTab *t = [[NSTextTab alloc]initWithTextAlignment:NSTextAlignmentRight location:rect.size.width options:[[NSDictionary alloc] init]];
 	NSMutableParagraphStyle *style = [NSMutableParagraphStyle new];
@@ -93,7 +102,7 @@ static CGFloat kSpace = 2;
 	//style.hyphenationFactor = .4;
 	//style.lineBreakMode = NSLineBreakByTruncatingMiddle;
 	[as addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, as.length)];
-	
+
 	UIColor *color = self.selected ? [UIColor whiteColor] : self.color;
 	[as addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, as.length)];
 	
