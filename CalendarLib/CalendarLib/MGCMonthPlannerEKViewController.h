@@ -43,5 +43,6 @@
 - (void)reloadEvents;
 
 - (EKEvent*)eventAtIndex:(NSUInteger)index date:(NSDate*)date;
+- (NSArray*)eventsAtDate:(NSDate*)date;
 
 @end
