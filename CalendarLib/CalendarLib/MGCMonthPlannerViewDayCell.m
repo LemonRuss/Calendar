@@ -30,7 +30,7 @@
 
 #import "MGCMonthPlannerViewDayCell.h"
 
-static const CGFloat kHeaderMargin = 1;
+static const CGFloat kHeaderMargin = 5;
 static const CGFloat kDotSize = 8;
 
 
@@ -51,9 +51,10 @@ static const CGFloat kDotSize = 8;
         
         self.dayLabel = [[UILabel alloc]initWithFrame:CGRectNull];
         self.dayLabel.font = [UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
-        self.dayLabel.numberOfLines = 1;
-        self.dayLabel.adjustsFontSizeToFitWidth = YES;
-        
+        self.dayLabel.numberOfLines = 0;
+        self.dayLabel.adjustsFontSizeToFitWidth = NO;
+        self.dayLabel.layer.cornerRadius = self.dayLabel.frame.size.height/2;
+      
         [self.contentView addSubview:self.dayLabel];
         
         self.dotLayer = [CAShapeLayer layer];
@@ -106,7 +107,8 @@ static const CGFloat kDotSize = 8;
     
     CGRect headerFrame = CGRectMake(0, 0, self.contentView.bounds.size.width, self.headerHeight);
     self.dayLabel.frame =  CGRectInset(headerFrame, kHeaderMargin, kHeaderMargin);
-    
+    [self.dayLabel sizeToFit];
+  
     CGRect contentFrame = CGRectMake(0, self.headerHeight, self.contentView.bounds.size.width, self.contentView.bounds.size.height - self.headerHeight);
     contentFrame = CGRectInset(contentFrame, kHeaderMargin, kHeaderMargin);
     

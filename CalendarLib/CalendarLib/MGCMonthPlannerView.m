@@ -1466,8 +1466,8 @@ typedef enum
     MGCMonthPlannerBackgroundView *view = [self.eventsView dequeueReusableSupplementaryViewOfKind:MonthBackgroundViewKind withReuseIdentifier:MonthBackgroundViewIdentifier forIndexPath:indexPath];
     view.numberOfColumns = 7;
     view.numberOfRows = numRows;
-    view.firstColumn = self.gridStyle & MGCMonthPlannerGridStyleFill ? 0 : firstColumn;
-    view.lastColumn =  self.gridStyle & MGCMonthPlannerGridStyleFill ? 7 : lastColumn;
+    view.firstColumn = 0;
+    view.lastColumn =  6;
     view.drawVerticalLines = self.gridStyle & MGCMonthPlannerGridStyleVerticalLines;
     view.drawHorizontalLines = self.gridStyle & MGCMonthPlannerGridStyleHorizontalLines;
     view.drawBottomDayLabelLines = self.gridStyle & MGCMonthPlannerGridStyleBottomDayLabel;

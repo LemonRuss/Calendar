@@ -537,6 +537,9 @@ typedef NS_ENUM(NSUInteger, MGCDayPlannerTimeMark) {
 
 @optional
 
+
+- (void)dayPlannerView:(MGCDayPlannerView*)view dayPressed: (NSDate*) day;
+
 /*!
 	@group Configuring appearance
  */

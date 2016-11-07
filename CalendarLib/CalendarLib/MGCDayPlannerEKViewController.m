@@ -443,6 +443,10 @@ static NSString* const EventCellReuseIdentifier = @"EventCellReuseIdentifier";
     [self showPopoverForNewEvent:ev];
 }
 
+-(void) dayPlannerView:(MGCDayPlannerView *)view dayPressed:(NSDate *)day {
+  
+}
+
 #pragma mark - MGCDayPlannerViewDelegate
 
 - (void)dayPlannerView:(MGCDayPlannerView*)view didSelectEventOfType:(MGCEventType)type atIndex:(NSUInteger)index date:(NSDate*)date

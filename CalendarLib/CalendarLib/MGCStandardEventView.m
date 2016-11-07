@@ -52,7 +52,7 @@ static CGFloat kSpace = 2;
 		_color = [UIColor blackColor];
 		_style = MGCStandardEventViewStylePlain|MGCStandardEventViewStyleSubtitle;
 		_font = [UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
-		_leftBorderView = [[UIView alloc]initWithFrame:CGRectNull];
+//		_leftBorderView = [[UIView alloc]initWithFrame:CGRectNull];
 		[self addSubview:_leftBorderView];
 	}
     return self;
@@ -75,17 +75,39 @@ static CGFloat kSpace = 2;
 	NSMutableAttributedString *as = [[NSMutableAttributedString alloc]initWithString:s attributes:@{NSFontAttributeName: boldFont ?: self.font }];
 	
 	if (self.subtitle && self.subtitle.length > 0 && self.style & MGCStandardEventViewStyleSubtitle) {
-		NSMutableString *s  = [NSMutableString stringWithFormat:@"\n%@", self.subtitle];
+		NSMutableString *s  = [NSMutableString stringWithFormat:@"\n\r%@", self.subtitle];
 		NSMutableAttributedString *subtitle = [[NSMutableAttributedString alloc]initWithString:s attributes:@{NSFontAttributeName:self.font}];
 		[as appendAttributedString:subtitle];
 	}
-	
-	if (self.detail && self.detail.length > 0 && self.style & MGCStandardEventViewStyleDetail) {
-		UIFont *smallFont = [UIFont fontWithDescriptor:[self.font fontDescriptor] size:self.font.pointSize - 2];
-		NSMutableString *s = [NSMutableString stringWithFormat:@"\t%@", self.detail];
-		NSMutableAttributedString *detail = [[NSMutableAttributedString alloc]initWithString:s attributes:@{NSFontAttributeName:smallFont}];
-		[as appendAttributedString:detail];
-	}
+  
+
+  if (_subtitle != nil) {
+    
+    Boolean tks = [_subtitle rangeOfString: @"ТКС"].location != NSNotFound;
+    Boolean vks = [_subtitle rangeOfString: @"ВКС"].location != NSNotFound;
+    
+    NSMutableArray* images = [NSMutableArray new];
+    
+    if (tks) {
+      [images addObject:[UIImage imageNamed:@"call"]];
+    }
+    
+    if (vks) {
+      [images addObject:[UIImage imageNamed:@"cam"]];
+    }
+    if (tks || vks) {
+      NSMutableAttributedString *imageString = [[NSMutableAttributedString alloc] initWithString:@"\n\r"];
+      [as appendAttributedString:imageString];
+    }
+    for (UIImage* image in images) {
+      NSTextAttachment *attachment = [[NSTextAttachment alloc] initWithData:nil ofType:nil];
+      
+      attachment.image = image;
+      
+      NSAttributedString *image = [NSAttributedString attributedStringWithAttachment:attachment];
+      [as appendAttributedString:image];
+    }
+  }
 	
 	NSTextTab *t = [[NSTextTab alloc]initWithTextAlignment:NSTextAlignmentRight location:rect.size.width options:[[NSDictionary alloc] init]];
 	NSMutableParagraphStyle *style = [NSMutableParagraphStyle new];
@@ -93,7 +115,7 @@ static CGFloat kSpace = 2;
 	//style.hyphenationFactor = .4;
 	//style.lineBreakMode = NSLineBreakByTruncatingMiddle;
 	[as addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, as.length)];
-	
+
 	UIColor *color = self.selected ? [UIColor whiteColor] : self.color;
 	[as addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, as.length)];
 	
@@ -104,7 +126,7 @@ static CGFloat kSpace = 2;
 - (void)layoutSubviews
 {
 	[super layoutSubviews];
-	self.leftBorderView.frame = CGRectMake(0, 0, 2, self.bounds.size.height);
+	self.leftBorderView.frame = CGRectMake(2, 0, 2, self.bounds.size.height);
 	[self setNeedsDisplay];
 }
 
@@ -166,9 +188,7 @@ static CGFloat kSpace = 2;
 	CGRect boundingRect = [self.attrString boundingRectWithSize:CGSizeMake(drawRect.size.width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
 	drawRect.size.height = fminf(drawRect.size.height, self.visibleHeight);
 	
-	if (boundingRect.size.height > drawRect.size.height) {
 		[self.attrString.mutableString replaceOccurrencesOfString:@"\n" withString:@"  " options:NSCaseInsensitiveSearch range:NSMakeRange(0, self.attrString.length)];
-	}
 
 	[self.attrString drawWithRect:drawRect options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin context:nil];
 }

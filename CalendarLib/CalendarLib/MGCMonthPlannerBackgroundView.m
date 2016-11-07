@@ -36,9 +36,9 @@
 - (id)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-		self.backgroundColor = [UIColor clearColor];
-		self.userInteractionEnabled = NO;
-		self.gridColor = [UIColor colorWithRed:.6f green:.6f blue:.6f alpha:1.];
+	self.backgroundColor = [UIColor clearColor];
+	self.userInteractionEnabled = NO;
+	self.gridColor = [UIColor colorWithRed: 204/255 green: 204/255 blue: 204/255 alpha: 0.2];
         self.lastColumn = 7;
         self.drawHorizontalLines = YES;
         self.drawVerticalLines = YES;

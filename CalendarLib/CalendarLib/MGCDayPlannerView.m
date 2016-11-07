@@ -858,6 +858,10 @@ static const CGFloat kMaxHourSlotHeight = 150.;
     _dayColumnsView.scrollEnabled = NO;
     _dayColumnsView.allowsSelection = NO;
     
+//    UITapGestureRecognizer *tap = [UITapGestureRecognizer new];
+//    [tap addTarget:self action:@selector(handleTap:)];
+//    [_dayColumnsView addGestureRecognizer:tap];
+    
     [_dayColumnsView registerClass:MGCDayColumnCell.class forCellWithReuseIdentifier:DayColumnCellReuseIdentifier];
   }
   return _dayColumnsView;
@@ -972,6 +976,7 @@ static const CGFloat kMaxHourSlotHeight = 150.;
     CGPoint pt = [gesture locationInView:view];
     
     NSIndexPath *path = [view indexPathForItemAtPoint:pt];
+    
     if (path)  // a cell was touched
     {
       NSDate *date = [self dateFromDayOffset:path.section];
@@ -997,6 +1002,7 @@ static const CGFloat kMaxHourSlotHeight = 150.;
 -(void)selectEventWithDelegate:(BOOL)tellDelegate type:(MGCEventType)type atIndex:(NSUInteger)index date:(NSDate*)date
 {
   [self deselectEventWithDelegate:tellDelegate];
+  
   
   if (self.allowsSelection) {
     NSInteger section = [self dayOffsetFromDate:date];
@@ -1704,6 +1710,21 @@ static const CGFloat kMaxHourSlotHeight = 150.;
   return 1; // for dayColumnView
 }
 
+-(void) handleTouchOfDayColumn:(UITapGestureRecognizer*)gesture {
+  printf("%@", gesture);
+  
+  UICollectionView *view = (UICollectionView*) [gesture.view superview];
+  CGPoint pt = [gesture locationInView: view];
+  
+  NSIndexPath *path = [view indexPathForItemAtPoint:pt];
+  
+  NSDate *date = [self dateFromDayOffset:path.section];
+  if ([self.delegate respondsToSelector:@selector(dayPlannerView:dayPressed:)]) {
+    [self.delegate dayPlannerView:self dayPressed:date];
+  }
+}
+
+
 - (UICollectionViewCell*)dayColumnCellAtIndexPath:(NSIndexPath*)indexPath
 {
   MGCDayColumnCell *dayCell = [self.dayColumnsView dequeueReusableCellWithReuseIdentifier:DayColumnCellReuseIdentifier forIndexPath:indexPath];
@@ -1724,6 +1745,10 @@ static const CGFloat kMaxHourSlotHeight = 150.;
   if (attrStr) {
     dayCell.dayLabel.attributedText = attrStr;
     dayCell.dayLabel.textAlignment = NSTextAlignmentCenter;
+    
+    UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget:self action: @selector(handleTouchOfDayColumn:)];
+    dayCell.userInteractionEnabled = true;
+    [dayCell addGestureRecognizer:tap];
   }
   else {
     
